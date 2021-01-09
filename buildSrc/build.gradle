@@ -1,0 +1,14 @@
+plugins {
+    id "idea"
+    id "java"
+}
+
+repositories {
+    mavenCentral()
+}
+
+// Dependency Configuration
+dependencies {
+    implementation "com.amazonaws:aws-java-sdk-dynamodb:1.11.447"
+    implementation "org.apache.commons:commons-lang3:3.11"
+}

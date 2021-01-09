@@ -1,0 +1,62 @@
+import com.amazonaws.services.dynamodbv2.model.AttributeDefinition
+import com.amazonaws.services.dynamodbv2.model.GlobalSecondaryIndex
+import com.amazonaws.services.dynamodbv2.model.KeySchemaElement
+import com.amazonaws.services.dynamodbv2.model.KeyType
+import com.amazonaws.services.dynamodbv2.model.Projection
+import com.amazonaws.services.dynamodbv2.model.ProjectionType
+import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput
+import com.amazonaws.services.dynamodbv2.model.ScalarAttributeType
+import com.nike.pdm.localstack.aws.dynamodb.CreateDynamoDbTableTask
+
+plugins {
+    id "java"
+    id "application"
+    id "com.avast.gradle.docker-compose"    version "0.14.0"
+    id "com.nike.pdm.localstack"            version "0.1.0"
+}
+
+// Project Configuration
+group = "com.github.gregwhitaker"
+version = "0.1.0"
+mainClassName = "example.DynamoExampleApplication"
+
+// Dependency Management
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "com.amazonaws:aws-java-sdk-dynamodb:1.11.447"
+    implementation "org.slf4j:slf4j-simple:1.7.30"
+}
+
+// Docker Compose
+dockerCompose {
+    useComposeFiles = [ 'localstack/localstack-docker-compose.yml' ]
+}
+
+// LocalStack
+task setupLocalTable(type: CreateDynamoDbTableTask) {
+    tableName = 'example.websession'
+    keySchema = [
+            new KeySchemaElement("sessionId", KeyType.HASH)
+    ]
+    attributeDefinitions = [
+            new AttributeDefinition("sessionId", ScalarAttributeType.S),
+            new AttributeDefinition("userId", ScalarAttributeType.N)
+    ]
+    globalSecondaryIndexes = [
+            // Global index to retrieve sessions by userId
+            new GlobalSecondaryIndex()
+                .withIndexName("user-session-idx")
+                .withProvisionedThroughput(
+                        new ProvisionedThroughput(100L, 100L))
+                .withProjection(
+                        new Projection()
+                                .withProjectionType(ProjectionType.ALL))
+                .withKeySchema(
+                        new KeySchemaElement("userId", KeyType.HASH),
+                        new KeySchemaElement("sessionId", KeyType.RANGE))
+    ]
+    initializer = 'example.buildsrc.WebSessionTableInitializer'
+}
