@@ -1,5 +1,18 @@
 # gradle-localstack-dynamodb-example
 
+An example of working with mock AWS DynamoDB tables using [LocalStack](https://github.com/localstack/localstack) and the [Gradle LocalStack Plugin](https://github.com/Nike-Inc/gradle-localstack).
+
+In this example you will see how to configure a mock DynamoDB table and initialize it with test data using LocalStack and the
+Gradle LocalStack Plugin.
+
+## Building the Example
+Run the following command to build the example:
+
+    ./gradlew clean build
+
+## Running the Example
+Follow the steps below to run the example application:
+
 ## License
 MIT License
 
