@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -39,11 +40,12 @@ public class WebSessionTableInitializer {
      */
     public void run() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Random rand = new Random(System.currentTimeMillis());
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 50; i++) {
             final WebSession webSession = new WebSession();
             webSession.setSessionId(UUID.randomUUID().toString());
-            webSession.setUserId((long) i);
+            webSession.setUserId((long) rand.nextInt(10 - 1 + 1) + 1);
             webSession.setSessionData(RandomStringUtils.randomAlphanumeric(20));
             webSession.setCreatedOn(sdf.format(new Date()));
 
