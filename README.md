@@ -1,4 +1,5 @@
 # gradle-localstack-dynamodb-example
+![Build](https://github.com/gregwhitaker/gradle-localstack-dynamodb-example/workflows/Build/badge.svg)
 
 An example of working with mock AWS DynamoDB tables using [LocalStack](https://github.com/localstack/localstack) and the [Gradle LocalStack Plugin](https://github.com/Nike-Inc/gradle-localstack).
 
